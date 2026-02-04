@@ -33,7 +33,7 @@ const Note = () => {
                 {
                     details.map((ele,index)=>{
                         return (
-                            <div key={index} >
+                            <div key={ele._id} >
                                 <div className='text-5xl text-red-300'>{ele.title}</div>
                                 <div className='text-xl'>{ele.details}</div>
                             </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 
@@ -6,6 +6,8 @@ function Main() {
     const [title, setTitle] = useState("");
     const [details, setDetails] = useState("");
     const [notes, setNotes] = useState([])
+
+    const ref = useRef(null)
 
     const display = async ()=>{
         const notes = await axios.get("/api/display")
@@ -53,6 +55,12 @@ function Main() {
                 onChange={(e) => {
                 setTitle(e.target.value);
                 }}
+                onKeyDown={(e)=>{
+                    if(e.key=="Enter"){
+                        e.preventDefault()
+                        ref.current.focus()
+                    }
+                }}
                 value={title}
                 className="bg-[#2B2B2E] text-white rounded-md w-full h-10 p-5"
                 type="text"
@@ -63,6 +71,12 @@ function Main() {
                 onChange={(e) => {
                 setDetails(e.target.value);
                 }}
+                onKeyDown={(e)=>{
+                    if(e.key=="Enter"){
+                        handleCreate()
+                    }
+                }}
+                ref={ref}
                 value={details}
                 className="bg-[#2B2B2E] text-white rounded-md min-h-36 resize-none w-full h- px-5 py-3"
                 name="details"
@@ -81,7 +95,7 @@ function Main() {
                 notes.map((note,index)=>{
                 return(
 
-                    <div key={index} className="card bg-zinc-700 min-h-28 min-w-40 rounded-md flex flex-col gap-3 p-2 items-center relative">
+                    <div key={note._id} className="card bg-zinc-700 min-h-28 min-w-40 rounded-md flex flex-col gap-3 p-2 items-center relative">
                         <div className="buttons flex gap-1 absolute top-1 right-1">
                             <NavLink to={`/note/edit/${note._id}`}><img className="w-[1.3rem] cursor-pointer" src="/edit.svg" alt="" /></NavLink>
                             <img onClick={()=>handleDelete(note._id)} className="w-[1rem] cursor-pointer" src="/delete.svg" alt="" />
